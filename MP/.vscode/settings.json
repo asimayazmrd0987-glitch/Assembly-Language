@@ -1,0 +1,37 @@
+{
+    "files.associations": {
+        "*.asm": "assembly",
+        "*.s": "assembly"
+    },
+    "assembly.syntax": "nasm",
+    
+    // Build task configuration
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Build ASM (NASM)",
+                "type": "shell",
+                "command": "nasm",
+                "args": [
+                    "-f", "win64",
+                    "${file}",
+                    "-o", "${fileDirname}/${fileBasenameNoExtension}.obj"
+                ],
+                "group": "build"
+            },
+            {
+                "label": "Link (GoLink)",
+                "type": "shell",
+                "command": "golink",
+                "args": [
+                    "${fileDirname}/${fileBasenameNoExtension}.obj",
+                    "/console",
+                    "kernel32.dll"
+                ],
+                "group": "build",
+                "dependsOn": ["Build ASM (NASM)"]
+            }
+        ]
+    }
+}

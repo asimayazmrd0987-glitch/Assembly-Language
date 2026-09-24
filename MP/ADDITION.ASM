@@ -1,0 +1,56 @@
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    num1 DB 5
+    num2 DB 3
+
+    msgAdd DB 'Addition = $'
+    msgSub DB 13,10,'Subtraction = $'
+
+.CODE
+MAIN PROC
+
+    MOV AX, @DATA
+    MOV DS, AX
+
+    ; -------------------------
+    ; Addition
+    ; -------------------------
+    MOV AL, num1
+    ADD AL, num2
+
+    MOV BL, AL
+
+    LEA DX, msgAdd
+    MOV AH, 09H
+    INT 21H
+
+    ADD BL, 30H
+    MOV DL, BL
+    MOV AH, 02H
+    INT 21H
+
+    ; -------------------------
+    ; Subtraction
+    ; -------------------------
+    MOV AL, num1
+    SUB AL, num2
+
+    MOV BL, AL
+
+    LEA DX, msgSub
+    MOV AH, 09H
+    INT 21H
+
+    ADD BL, 30H
+    MOV DL, BL
+    MOV AH, 02H
+    INT 21H
+
+    ; Exit program
+    MOV AH, 4CH
+    INT 21H
+
+MAIN ENDP
+END MAIN

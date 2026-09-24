@@ -1,0 +1,64 @@
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    msg1 DB 'Enter characters: $'
+    msg2 DB 13,10,'You entered: $'
+    chars DB 50 DUP(?)
+    count DB 0
+
+.CODE
+MAIN PROC
+
+    MOV AX, @DATA
+    MOV DS, AX
+
+    ; Display message
+    LEA DX, msg1
+    MOV AH, 09H
+    INT 21H
+
+    LEA SI, chars
+
+READ:
+    MOV AH, 01H
+    INT 21H
+
+    ; Check Enter key
+    CMP AL, 13
+    JE DISPLAY
+
+    MOV [SI], AL
+    INC SI
+
+    INC count
+    JMP READ
+
+DISPLAY:
+
+    LEA DX, msg2
+    MOV AH, 09H
+    INT 21H
+
+    LEA SI, chars
+
+    ; Load number of characters
+    MOV CL, count
+    MOV CH, 0
+
+PRINT:
+    MOV DL, [SI]
+
+    MOV AH, 02H
+    INT 21H
+
+    INC SI
+    LOOP PRINT
+
+EXIT:
+
+    MOV AH, 4CH
+    INT 21H
+
+MAIN ENDP
+END MAIN

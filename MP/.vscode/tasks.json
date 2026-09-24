@@ -1,0 +1,40 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Assemble & Link",
+            "type": "shell",
+            "command": "nasm",
+            "args": [
+                "-f", "elf64",           // Linux: elf64, Windows: win64, macOS: macho64
+                "${file}",
+                "-o", "${fileDirname}/${fileBasenameNoExtension}.o"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "Link",
+            "type": "shell",
+            "command": "ld",
+            "args": [
+                "${fileDirname}/${fileBasenameNoExtension}.o",
+                "-o", "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "group": "build",
+            "dependsOn": ["Assemble & Link"]
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "command": "${fileDirname}/${fileBasenameNoExtension}",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "dependsOn": ["Link"],
+            "presentation": {
+                "reveal": "always"
+            }
+        }
+    ]
+}
